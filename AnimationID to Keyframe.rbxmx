@@ -1,0 +1,83 @@
+<roblox xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd" version="4">
+	<External>null</External>
+	<External>nil</External>
+	<Item class="Script" referent="RBX25005B5B05304DE4866F90AD4BFA0DAF">
+		<Properties>
+			<ProtectedString name="Source"><![CDATA[--made by gbas feel free to skid it
+
+local toolbar = plugin:CreateToolbar("gbas's plugins")
+local newScriptButton = toolbar:CreateButton(
+	"AnimationID to Keyframe", 
+	"convert animationId to keyframes", 
+	"rbxassetid://15278403790"
+)
+
+local Selection = game:GetService("Selection")
+
+local function checkAnimationSelection()
+	local selectedObjects = Selection:Get()
+	for _, obj in ipairs(selectedObjects) do
+		if obj:IsA("Animation") then
+			return obj
+		end
+	end
+	return nil
+end
+
+Selection.SelectionChanged:Connect(function()
+	if checkAnimationSelection() then
+		print("Animation selected!")
+	else
+		print("No animation selected")
+	end
+end)
+
+newScriptButton.Click:Connect(function()
+	local selectedObjects = Selection:Get()
+	local animationsFound = false
+	
+	if workspace:FindFirstChild("ConvertedAnimations") then
+		for _, obj in ipairs(selectedObjects) do
+			if obj:IsA("Animation") then
+				animationsFound = true
+				local animationId = obj.AnimationId
+				local newObject = game:GetObjects(animationId)[1]
+				newObject.Parent = workspace:FindFirstChild("ConvertedAnimations")
+				newObject.Name = obj.Name
+				print("Loaded animation:", obj.Name)
+			end
+		end
+	else
+		local folder = Instance.new("Folder")
+		folder.Name = "ConvertedAnimations"
+		folder.Parent = workspace
+		for _, obj in ipairs(selectedObjects) do
+			if obj:IsA("Animation") then
+				animationsFound = true
+				local animationId = obj.AnimationId
+				local newObject = game:GetObjects(animationId)[1]
+				newObject.Parent = workspace:FindFirstChild("ConvertedAnimations")
+				newObject.Name = obj.Name
+				print("Loaded animation:", obj.Name)
+			end
+		end
+	end
+
+	if not animationsFound then
+		warn("Please select at least one Animation!")
+	end
+end)
+]]></ProtectedString>
+			<bool name="Disabled">false</bool>
+			<Content name="LinkedSource"><null></null></Content>
+			<token name="RunContext">3</token>
+			<string name="ScriptGuid">{EF1118B0-9A8D-4637-942B-658022CA0401}</string>
+			<BinaryString name="AttributesSerialize"></BinaryString>
+			<SecurityCapabilities name="Capabilities">0</SecurityCapabilities>
+			<bool name="DefinesCapabilities">false</bool>
+			<string name="Name">Script</string>
+			<int64 name="SourceAssetId">-1</int64>
+			<BinaryString name="Tags"></BinaryString>
+		</Properties>
+	</Item>
+</roblox>
